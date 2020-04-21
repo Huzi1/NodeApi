@@ -8,7 +8,7 @@ const app = express();
 
 db.connectDB().then(r =>
     console.log('connected'));
-
+// in order to avoid cors policy error while running react and node server
 app.use(cors())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}))
