@@ -15,3 +15,23 @@ You will also see any lint errors in the console.
 Launches server in debug mode
 
 
+
+## 'APi Test'
+
+Use postman to test api. Sample object body 
+
+{
+	
+	"username":"huz1",
+	"password":"admin1",
+	"category":"internet",
+	"data": {
+		"category":"internet",
+		"id": "aug2020",
+		"amount": 50
+	}
+}
+
+## `MongoDB & Mongoose`
+
+Implemented Mongoose model schema. The data Object in model can take in any input structure, I have used and Array of Objects. Each user will have a seperate document containg all its data
