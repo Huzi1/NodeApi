@@ -30,8 +30,23 @@ app.post('/regis', function (req, res) {
 
 });
 
+//Get data
+app.get('/getData', function (req, res){
+    // let response;
 
-//Login validation
+    db.getUserDoc(req.body).then(function (response) {
+
+        if (response.code === 200){
+
+            res.end(JSON.stringify({code: 200, doc: response.doc}));
+        }
+
+    })
+})
+
+
+
+//Login validation & getData
 app.post('/check', async function (req, res) {
     console.log(req.body)
     let response;
