@@ -25,7 +25,7 @@ app.post('/formA', function (req, res) {
 
 //RegisterUser
 app.post('/regis', function (req, res) {
-    db.registerUser(req.body)
+    db.registerUser(req.body);
     res.end(JSON.stringify(200));
 
 });
@@ -33,22 +33,23 @@ app.post('/regis', function (req, res) {
 //Get data
 app.get('/getData', function (req, res){
     // let response;
-
-    db.getUserDoc(req.body).then(function (response) {
+    const body = req.query;
+        console.log("here ",body);
+    db.getUserDoc(body).then(function (response) {
 
         if (response.code === 200){
-
+            console.log(response.doc);
             res.end(JSON.stringify({code: 200, doc: response.doc}));
         }
 
     })
-})
+});
 
 
 
 //Login validation & getData
 app.post('/check', async function (req, res) {
-    console.log(req.body)
+    console.log(req.body);
     let response;
     try {
         response = await db.validate(req.body);
@@ -76,14 +77,15 @@ app.post('/check', async function (req, res) {
 
 /**insert & update data **/
 app.post('/update', function (req, res) {
-    let obj = req.body
-    let category = obj.category
-    let insertObj = obj.data
+    let obj = req.body;
+    console.log("here in server",obj);
+    let category = obj.category;
+    let insertObj = obj.data;
     let flag = false;
     let index = 0;
     db.getUserDoc(req.body).then(function (data) {
 
-        let billsArr = data.doc.data
+        let billsArr = data.doc.data;
         for (let i = 0; i < billsArr.length; i++) {
             if (billsArr[i].id === req.body.data.id && billsArr[i].category === req.body.category) {
                 flag = true;
@@ -102,7 +104,7 @@ app.post('/update', function (req, res) {
             // res.setHeader('Content-Type', 'text/plain');
             // res.end(data)
             console.log(data);
-            res.end(JSON.stringify(200));
+            res.end(JSON.stringify(data));
         }).catch(function (e) {
             return res.status(500, {
                 error: e
