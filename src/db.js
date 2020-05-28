@@ -99,6 +99,26 @@ function pullArrItem(obj) {
 
 }
 
+function pullCat(obj) {
+    return new Promise (function (resolve, reject) {
+        let cat = JSON.parse(obj.data)
+        console.log("db pull",cat.category);
+        let qry = User.findOneAndUpdate({username:obj.username}, {$pull:{"data": { category: cat.category}}}, {new:true});
+
+        qry.exec(function (err, userDoc) {
+            if(err){
+                console.log(err)
+                return reject({code:404})
+            }else{
+                console.log(userDoc + "pull successful")
+                return resolve({code:200, doc:userDoc})
+            }
+        })
+    });
+
+}
+
+
 function getUserDoc(obj) {
     return new Promise(function (resolve, reject) {
 
@@ -125,7 +145,8 @@ module.exports = {
     update,
     connectDB,
     getUserDoc,
-    pullArrItem
+    pullArrItem,
+    pullCat
 
 }
 

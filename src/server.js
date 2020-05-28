@@ -151,6 +151,28 @@ app.delete('/delBill', function (req, res) {
 
 
 })
+//Delete a Category
+app.delete('/delCat', function (req, res) {
+    let body = req.query
+    console.log("delete cat at server", body)
+    db.pullCat(body).then(function (data) {
+            if (data.code == 200) {
+
+                res.end(JSON.stringify(data));
+            } else {
+                res.end(JSON.stringify(404));
+            }
+
+        }
+    ).catch(function (e) {
+
+        res.status(500, {
+            error: e
+        })
+    })
+
+
+})
 
 
 /**
