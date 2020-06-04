@@ -83,16 +83,40 @@ function update(obj, newBill) {
 //delete array item in document
 function pullArrItem(obj) {
     return new Promise (function (resolve, reject) {
-
-        let qry = User.update({username:obj.username}, {$pull:{"data": {id:obj.data.id, category: obj.data.category}}});
+       const bodyData =JSON.parse(obj.data)
+        // console.log("In db function",bodyData)
+        let qry = User.findOneAndUpdate({username:obj.username}, {$pull:{"data": {id:bodyData.id, category: bodyData.category}}}, {new:true});
 
         qry.exec(function (err, userDoc) {
             if(err){
                 console.log(err)
                 return reject({code:404})
             }else{
-                console.log(userDoc + "pull successful")
-                return resolve({code:200})
+                console.log("Response after pulling",userDoc )
+
+                return resolve({code:200, doc:userDoc})
+
+            }
+        })
+    });
+
+}
+// Pull arr item using object
+function pullObjArrItem(obj) {
+    return new Promise (function (resolve, reject) {
+       const data = obj.data
+        console.log("In db function",data)
+        let qry = User.findOneAndUpdate({username:obj.username}, {$pull:{"data": {id:data.id, category: data.category}}}, {new:true});
+
+        qry.exec(function (err, userDoc) {
+            if(err){
+                console.log(err)
+                return reject({code:404})
+            }else{
+                console.log("Response after pulling",userDoc )
+
+                return resolve({code:200, doc:userDoc})
+
             }
         })
     });
@@ -146,7 +170,8 @@ module.exports = {
     connectDB,
     getUserDoc,
     pullArrItem,
-    pullCat
+    pullCat,
+    pullObjArrItem
 
 }
 
