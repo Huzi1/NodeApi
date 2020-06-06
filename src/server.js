@@ -21,14 +21,19 @@ app.use(bodyParser.urlencoded({extended: false}))
 
 //RegisterUser
 app.post('/regis', function (req, res) {
+    console.log(req.body)
     db.registerUser(req.body).then(function (response) {
-        if (response === 200) {
-            res.end(JSON.stringify(200));
+        if (response.code === 200) {
+            res.end(JSON.stringify({code:200, message: "New user registered!"}));
+        }
+        else{
+            console.log("in server res", response)
+            res.end(JSON.stringify({code:204, res: response}));
         }
     }).catch(function (e) {
-        return res.status(500, {
-            error: e
-        })
+
+        res.end(JSON.stringify({code:202, message: "Error! username already exist"}));
+
     })
 });
 
