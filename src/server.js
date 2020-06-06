@@ -17,30 +17,30 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}))
 
 
-app.post('/formA', function (req, res) {
 
-    // console.log(req.body);
-    res.end(JSON.stringify(req.body));
-
-
-});
 
 //RegisterUser
 app.post('/regis', function (req, res) {
-    db.registerUser(req.body);
-    res.end(JSON.stringify(200));
-
+    db.registerUser(req.body).then(function (response) {
+        if (response === 200) {
+            res.end(JSON.stringify(200));
+        }
+    }).catch(function (e) {
+        return res.status(500, {
+            error: e
+        })
+    })
 });
 
 //Get data
 app.get('/getData', function (req, res) {
     // let response;
     const body = req.query;
-    // console.log("here ",body);
+
     db.getUserDoc(body).then(function (response) {
 
         if (response.code === 200) {
-            // console.log(response.doc);
+
             res.end(JSON.stringify({code: 200, doc: response.doc}));
         }
 
@@ -50,13 +50,12 @@ app.get('/getData', function (req, res) {
 
 //Login validation & getData
 app.post('/check', async function (req, res) {
-    // console.log(req.body);
+
     let response;
     try {
         response = await db.validate(req.body);
 
 
-        // console.log(response)
         if (response === 202) {
             db.getUserDoc(req.body).then(function (data) {
 
@@ -66,7 +65,7 @@ app.post('/check', async function (req, res) {
 
 
             })
-            // res.end(JSON.stringify(200));
+
         } else {
             res.end(JSON.stringify(204));
         }
@@ -79,7 +78,7 @@ app.post('/check', async function (req, res) {
 /**insert & update data **/
 app.post('/update', function (req, res) {
     let obj = req.body;
-    console.log("here in server", obj);
+
     let category = obj.category;
     let insertObj = obj.data;
     let flag = false;
@@ -100,7 +99,7 @@ app.post('/update', function (req, res) {
         if (flag) {
             console.log(req.body)
             db.pullObjArrItem(req.body).then(function (data) {
-                console.log(data)
+                // console.log(data)
                 flag = false;
             });
         }
@@ -139,7 +138,7 @@ app.delete('/delBill', function (req, res) {
     // console.log("billBody",body);
     db.pullArrItem(body).then(function (data) {
             if (data.code == 200) {
-                // console.log("bill delete response", data)
+
                 res.end(JSON.stringify({code: 200, doc: data.doc}));
             } else {
                 res.end(JSON.stringify(404));
@@ -158,7 +157,7 @@ app.delete('/delBill', function (req, res) {
 //Delete a Category
 app.delete('/delCat', function (req, res) {
     let body = req.query
-    // console.log("delete cat at server", body)
+
     db.pullCat(body).then(function (data) {
             if (data.code == 200) {
 
@@ -195,7 +194,7 @@ app.get('/getDoc', function (req, res) {
                     catBill[`${billsArr[i].id}`] = billsArr[i].amount
                 }
             }
-            // console.log(catBill);
+
             res.end(JSON.stringify({code: 200, respData: catBill}));
 
         } else {
@@ -213,7 +212,7 @@ app.get('/getDoc', function (req, res) {
 
 app.post('/formA', function (req, res) {
 
-    // console.log(req.body);
+
     res.end(JSON.stringify(req.body));
 
 
